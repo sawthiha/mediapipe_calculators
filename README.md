@@ -15,5 +15,5 @@ Custom calculators for Mediapipe framework.
 You simply put this source directory as submodule into `mediapipe/calculators/custom` or anywhere else inside `mediapipe` where you can reference from bazel. Or, simply run the following commands from the `mediapipe` root directory.
 
 ```bash
-git submodule git@github.com:sawthiha/mediapipe_calculators.git mediapipe/calculators/custom
+git submodule add git@github.com:sawthiha/mediapipe_calculators.git mediapipe/calculators/custom
 ```
