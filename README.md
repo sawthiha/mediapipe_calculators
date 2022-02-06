@@ -1,4 +1,4 @@
-# Custom Mediapipe Calculator
+# Custom Mediapipe Calculators
 Custom calculators for Mediapipe framework.
 
 ## Features
