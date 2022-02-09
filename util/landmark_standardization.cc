@@ -10,6 +10,12 @@
 namespace mediapipe
 {
 
+    namespace
+    {
+        constexpr char kLandmarkOutputStream[] = "LANDMARKS";
+        constexpr char kMatrixOutputStream[] = "MATRIX";
+    } // namespace
+
     /**
      * @brief Detect face alignments from Standardized Landmarks
      * 
@@ -17,7 +23,8 @@ namespace mediapipe
      *      IMAGE - Reference Image, serves as tick signal
      *      0 - Standardized Landmarks (std::vector<NormalizedLandmarkList>)
      * OUTPUTS:
-     *      0 - Standardized Landmarks (std::vector<NormalizedLandmarkList>)
+     *      LANDMARKS - Standardized Landmarks (std::vector<NormalizedLandmarkList>)
+     *      MATRIX - Standardized Landmarks in OpenCV's Matrix type (std::vector<cv::Mat>)
      * 
      * Example:
      * 
@@ -25,7 +32,8 @@ namespace mediapipe
      *   calculator: "LandmarkStandardizationCalculator"
      *   input_stream: "IMAGE:throttled_input_video"
      *   input_stream: "multi_face_landmarks"
-     *   output_stream: "multi_face_std_landmarks"
+     *   output_stream: "LANDMARKS: multi_face_std_landmarks"
+     *   output_stream: "MATRIX: multi_face_std_landmarks_mat"
      * }
      * 
      */
@@ -49,7 +57,8 @@ namespace mediapipe
     {
         cc->Inputs().Tag("IMAGE").SetAny();
         cc->Inputs().Index(0).Set<std::vector<NormalizedLandmarkList> >();
-        cc->Outputs().Index(0).Set<std::vector<NormalizedLandmarkList> >();
+        cc->Outputs().Tag(kLandmarkOutputStream).Set<std::vector<NormalizedLandmarkList> >();
+        cc->Outputs().Index(kMatrixOutputStream).Set<std::vector<cv::Mat>>();
         return absl::OkStatus();
     }
 
@@ -59,6 +68,7 @@ namespace mediapipe
     absl::Status LandmarkStandardizationCalculator::Process(CalculatorContext* cc)
     {
         std::vector<NormalizedLandmarkList> multi_norm_landmarks;
+        std::vector<cv::Mat> multi_norm_landmarks_mats;
         if (!cc->Inputs().Index(0).IsEmpty())
         {
             const auto& multiface_landmarks = cc->Inputs().Index(0).Get<std::vector<NormalizedLandmarkList> >();
@@ -87,11 +97,15 @@ namespace mediapipe
                     landmark->set_z(norm_mat.at<double>(i, 2));
                 }
                 multi_norm_landmarks.push_back(norm_landmarks);
+                multi_norm_landmarks_mats.push_back(norm_mat);
             }
         }
 
         Packet packet = MakePacket<decltype(multi_norm_landmarks)>(multi_norm_landmarks).At(cc->InputTimestamp());
-        cc->Outputs().Index(0).AddPacket(packet);
+        cc->Outputs().Tag(kLandmarkOutputStream).AddPacket(packet);
+
+        Packet packet = MakePacket<decltype(multi_norm_landmarks_mats)>(multi_norm_landmarks_mats).At(cc->InputTimestamp());
+        cc->Outputs().Tag(kMatrixOutputStream).AddPacket(packet);
 
         return absl::OkStatus();
     } // Process()
