@@ -9,7 +9,6 @@
 
 namespace mediapipe
 {
-
     /**
      * @brief Detect face alignments from Standardized Landmarks
      * 
