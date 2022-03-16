@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include "absl/memory/memory.h"
@@ -9,7 +10,6 @@
 
 namespace mediapipe
 {
-
     /**
      * @brief Detect face alignments from Standardized Landmarks
      * 
@@ -64,8 +64,8 @@ namespace mediapipe
             const auto& multiface_landmarks = cc->Inputs().Index(0).Get<std::vector<NormalizedLandmarkList> >();
             for(auto&& landmarks: multiface_landmarks)
             {
-                cv::Mat mat{landmarks.landmark_size(), 3, CV_64FC1};
-                cv::Mat norm_mat{landmarks.landmark_size(), 3, CV_64FC1};
+                cv::Mat mat(landmarks.landmark_size(), 3, CV_64FC1);
+                cv::Mat norm_mat(landmarks.landmark_size(), 3, CV_64FC1);
                 cv::Mat mean_mat, std_mat;
 
                 for (int i = 0; i < landmarks.landmark_size(); ++i) {
