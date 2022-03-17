@@ -37,7 +37,7 @@ namespace mediapipe
     class EyeBlinkToRenderDataCalculator: public CalculatorBase
     {
     private:
-        void AnnotateBlink(RenderData& render_data, std::string blink, int left_pos);
+        void AnnotateBlink(RenderData& render_data, std::string blink, double left_pos);
 
     public:
         EyeBlinkToRenderDataCalculator() = default;
@@ -64,7 +64,7 @@ namespace mediapipe
     { return absl::OkStatus(); }
 
 
-    void EyeBlinkToRenderDataCalculator::AnnotateBlink(RenderData& render_data, std::string blink, int left_pos)
+    void EyeBlinkToRenderDataCalculator::AnnotateBlink(RenderData& render_data, std::string blink, double left_pos)
     {
         auto annotation = render_data.add_render_annotations();
         if(blink == "")
@@ -80,12 +80,12 @@ namespace mediapipe
         }
         annotation->set_thickness(5);
         auto text = annotation->mutable_text();
-        text->set_font_height(40);
+        text->set_font_height(0.05);
         text->set_font_face(0);
         text->set_display_text(blink);
-        text->set_normalized(false);
+        text->set_normalized(true);
         text->set_left(left_pos);
-        text->set_baseline(500);
+        text->set_baseline(0.25);
     } // AnnotateBlink
 
     absl::Status EyeBlinkToRenderDataCalculator::Process(CalculatorContext* cc)
@@ -101,8 +101,8 @@ namespace mediapipe
                 std::string left_blink     = blink.at("left") < threshold ? "Blink": "";
                 std::string right_blink    = blink.at("right") < threshold ? "Blink": "";
             
-                this->AnnotateBlink(render_data, left_blink, 50);
-                this->AnnotateBlink(render_data, right_blink, 450);
+                this->AnnotateBlink(render_data, left_blink, 0.08);
+                this->AnnotateBlink(render_data, right_blink, 0.83);
             }
         }
         
