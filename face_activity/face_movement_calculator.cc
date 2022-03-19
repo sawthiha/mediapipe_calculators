@@ -12,7 +12,7 @@
 namespace mediapipe
 {
     /**
-     * @brief Detect various face activities such as position on screen and facial movements
+     * @brief Detect face position changes on screen
      * 
      * INPUTS:
      *      0 - Landmarks (std::vector<NormalizedLandmarkList>)
