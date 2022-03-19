@@ -37,7 +37,7 @@ namespace mediapipe
     class FaceAlignmentToRenderDataCalculator: public CalculatorBase
     {
     private:
-        void AnnotateAlignment(RenderData& render_data, std::string alignment, int left_pos);
+        void AnnotateAlignment(RenderData& render_data, std::string alignment, double left_pos);
     public:
         FaceAlignmentToRenderDataCalculator() = default;
         ~FaceAlignmentToRenderDataCalculator() override = default;
@@ -62,7 +62,7 @@ namespace mediapipe
     absl::Status FaceAlignmentToRenderDataCalculator::Open(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
-    void FaceAlignmentToRenderDataCalculator::AnnotateAlignment(RenderData& render_data, std::string alignment, int left_pos)
+    void FaceAlignmentToRenderDataCalculator::AnnotateAlignment(RenderData& render_data, std::string alignment, double left_pos)
     {
         auto annotation = render_data.add_render_annotations();
         if(alignment == "Neutral")
@@ -78,13 +78,13 @@ namespace mediapipe
         }
         annotation->set_thickness(5);
         auto text = annotation->mutable_text();
-        text->set_font_height(40);
+        text->set_font_height(0.06);
         text->set_font_face(0);
         text->set_display_text(alignment);
-        text->set_normalized(false);
+        text->set_normalized(true);
         text->set_left(left_pos);
         // Normalized coordinates must be between 0.0 and 1.0, if they are used.
-        text->set_baseline(300);
+        text->set_baseline(0.15);
     } // AnnotateAlignment()
 
     absl::Status FaceAlignmentToRenderDataCalculator::Process(CalculatorContext* cc)
@@ -103,8 +103,8 @@ namespace mediapipe
                                             alignment.at("vertical_align") <= -0.05 ? "Up":
                                             "Neutral";
                 
-                this->AnnotateAlignment(render_data, hor_align, 50);
-                this->AnnotateAlignment(render_data, ver_align, 450);
+                this->AnnotateAlignment(render_data, hor_align, 0.05);
+                this->AnnotateAlignment(render_data, ver_align, 0.8);
             }
         }
         
