@@ -78,9 +78,9 @@ namespace mediapipe
             annotation->mutable_color()->set_g(0);
             annotation->mutable_color()->set_b(0);
         }
-        annotation->set_thickness(5);
+        annotation->set_thickness(3);
         auto text = annotation->mutable_text();
-        text->set_font_height(0.05);
+        text->set_font_height(0.03);
         text->set_font_face(0);
         text->set_display_text(blink);
         text->set_normalized(true);
@@ -102,7 +102,7 @@ namespace mediapipe
                 std::string right_blink    = blink.at("right") < threshold ? "Blink": "";
             
                 this->AnnotateBlink(render_data, left_blink, 0.08);
-                this->AnnotateBlink(render_data, right_blink, 0.83);
+                this->AnnotateBlink(render_data, right_blink, 0.64);
             }
         }
         

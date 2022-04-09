@@ -76,15 +76,15 @@ namespace mediapipe
             annotation->mutable_color()->set_g(0);
             annotation->mutable_color()->set_b(0);
         }
-        annotation->set_thickness(5);
+        annotation->set_thickness(4);
         auto text = annotation->mutable_text();
-        text->set_font_height(0.06);
+        text->set_font_height(0.04);
         text->set_font_face(0);
         text->set_display_text(alignment);
         text->set_normalized(true);
         text->set_left(left_pos);
         // Normalized coordinates must be between 0.0 and 1.0, if they are used.
-        text->set_baseline(0.15);
+        text->set_baseline(0.2);
     } // AnnotateAlignment()
 
     absl::Status FaceAlignmentToRenderDataCalculator::Process(CalculatorContext* cc)
@@ -104,7 +104,7 @@ namespace mediapipe
                                             "Neutral";
                 
                 this->AnnotateAlignment(render_data, hor_align, 0.05);
-                this->AnnotateAlignment(render_data, ver_align, 0.8);
+                this->AnnotateAlignment(render_data, ver_align, 0.6);
             }
         }
         
