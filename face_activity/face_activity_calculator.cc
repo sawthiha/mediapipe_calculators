@@ -12,26 +12,26 @@
 namespace mediapipe
 {
     /**
-     * @brief Detect face position changes on screen
+     * @brief Detect facial activity changes
      * 
      * INPUTS:
-     *      0 - Landmarks (std::vector<NormalizedLandmarkList>)
+     *      0 - Standardized Landmarks (std::vector<NormalizedLandmarkList>)
      * OUTPUTS:
-     *      0 - Face Position Deltas (std::vector<double> )
+     *      0 - Facial Activity Deltas (std::vector<double> )
      * 
      * Example:
      * 
      * node {
-     *   calculator: "FaceMovementCalculator"
-     *   input_stream: "multi_face_landmarks"
-     *   output_stream: "multi_face_movements"
+     *   calculator: "FaceActivityCalculator"
+     *   input_stream: "multi_face_std_landmarks"
+     *   output_stream: "multi_face_activities"
      * }
      * 
      */
     class FaceMovementCalculator: public CalculatorBase
     {
     private:
-        cv::Vec3f m_prev_vec;
+        cv::Mat m_prev_landmark_mat;
 
     public:
         FaceMovementCalculator() = default;
@@ -59,20 +59,25 @@ namespace mediapipe
 
     absl::Status FaceMovementCalculator::Process(CalculatorContext* cc)
     {
-        std::vector<double > multi_face_movements;
+        std::vector<double > multi_face_activities;
         if (!cc->Inputs().Index(0).IsEmpty())
         {
             const auto& multi_face_landmarks = cc->Inputs().Index(0).Get<std::vector<NormalizedLandmarkList> >();
             for(auto&& landmarks: multi_face_landmarks)
             {
-                auto cur_landmark = landmarks.landmark(0);
-                cv::Vec3f cur_vec (cur_landmark.x(), cur_landmark.y(), cur_landmark.z());
-                multi_face_movements.push_back(cv::norm(cur_vec - m_prev_vec, cv::NORM_L2));
-                m_prev_vec = cur_vec;
+                cv::Mat cur_landmark_mat(landmarks.landmark_size(), 3, CV_64FC1);
+
+                for (int i = 0; i < landmarks.landmark_size(); ++i) {
+                    cur_landmark_mat.at<double>(i, 0) = landmarks.landmark(i).x();
+                    cur_landmark_mat.at<double>(i, 1) = landmarks.landmark(i).y();
+                    cur_landmark_mat.at<double>(i, 2) = landmarks.landmark(i).z();
+                }
+                multi_face_activities.push_back(cv::norm(cur_landmark_mat - m_prev_landmark_mat, cv::NORM_L2));
+                m_prev_landmark_mat = cur_landmark_mat;
             }
         }
             
-        Packet packet = MakePacket<decltype(multi_face_movements)>(multi_face_movements).At(cc->InputTimestamp());
+        Packet packet = MakePacket<decltype(multi_face_activities)>(multi_face_activities).At(cc->InputTimestamp());
         cc->Outputs().Index(0).AddPacket(packet);
 
         return absl::OkStatus();
@@ -82,8 +87,8 @@ namespace mediapipe
     { return absl::OkStatus(); }
 
     typedef BeginLoopCalculator<std::vector<double > >
-        BeginLoopFaceMovementVectorCalculator;
+        BeginLoopFacialActivityVectorCalculator;
     // Register the begin loop calculator
-    REGISTER_CALCULATOR(BeginLoopFaceMovementVectorCalculator);
+    REGISTER_CALCULATOR(BeginLoopFacialActivityVectorCalculator);
 
 } // namespace mediapipe
