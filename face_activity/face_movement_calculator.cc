@@ -82,8 +82,8 @@ namespace mediapipe
     { return absl::OkStatus(); }
 
     typedef BeginLoopCalculator<std::vector<double > >
-        BeginLoopMovementVectorCalculator;
+        BeginLoopFaceMovementVectorCalculator;
     // Register the begin loop calculator
-    REGISTER_CALCULATOR(BeginLoopMovementVectorCalculator);
+    REGISTER_CALCULATOR(BeginLoopFaceMovementVectorCalculator);
 
 } // namespace mediapipe
