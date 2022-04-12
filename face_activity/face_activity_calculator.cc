@@ -28,14 +28,14 @@ namespace mediapipe
      * }
      * 
      */
-    class FaceMovementCalculator: public CalculatorBase
+    class FaceActivityCalculator: public CalculatorBase
     {
     private:
         cv::Mat m_prev_landmark_mat;
 
     public:
-        FaceMovementCalculator() = default;
-        ~FaceMovementCalculator() override = default;
+        FaceActivityCalculator() = default;
+        ~FaceActivityCalculator() override = default;
 
         static absl::Status GetContract(CalculatorContract* cc);
 
@@ -45,19 +45,19 @@ namespace mediapipe
     };
 
     // Register the calculator to be used in the graph
-    REGISTER_CALCULATOR(FaceMovementCalculator);
+    REGISTER_CALCULATOR(FaceActivityCalculator);
 
-    absl::Status FaceMovementCalculator::GetContract(CalculatorContract* cc)
+    absl::Status FaceActivityCalculator::GetContract(CalculatorContract* cc)
     {
         cc->Inputs().Index(0).Set<std::vector<NormalizedLandmarkList> >();
         cc->Outputs().Index(0).Set<std::vector<double> >();
         return absl::OkStatus();
     }
 
-    absl::Status FaceMovementCalculator::Open(CalculatorContext* cc)
+    absl::Status FaceActivityCalculator::Open(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
-    absl::Status FaceMovementCalculator::Process(CalculatorContext* cc)
+    absl::Status FaceActivityCalculator::Process(CalculatorContext* cc)
     {
         std::vector<double > multi_face_activities;
         if (!cc->Inputs().Index(0).IsEmpty())
@@ -72,6 +72,13 @@ namespace mediapipe
                     cur_landmark_mat.at<double>(i, 1) = landmarks.landmark(i).y();
                     cur_landmark_mat.at<double>(i, 2) = landmarks.landmark(i).z();
                 }
+                
+                // Initialize prev_landmark_mat
+                if (m_prev_landmark_mat.size().area() == 0)
+                {
+                    m_prev_landmark_mat = cur_landmark_mat;
+                }
+                
                 multi_face_activities.push_back(cv::norm(cur_landmark_mat - m_prev_landmark_mat, cv::NORM_L2));
                 m_prev_landmark_mat = cur_landmark_mat;
             }
@@ -83,7 +90,7 @@ namespace mediapipe
         return absl::OkStatus();
     } // Process()
 
-    absl::Status FaceMovementCalculator::Close(CalculatorContext* cc)
+    absl::Status FaceActivityCalculator::Close(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
     typedef BeginLoopCalculator<std::vector<double > >
