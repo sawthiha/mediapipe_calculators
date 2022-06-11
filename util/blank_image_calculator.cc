@@ -1,0 +1,6 @@
+#include "absl/memory/memory.h"
+#include "mediapipe/framework/calculator_framework.h"
+#include "mediapipe/framework/port/status.h"
+#include "mediapipe/framework/formats/landmark.pb.h"
+#include "mediapipe/framework/formats/detection.pb.h"
+#include "mediapipe/framework/port/opencv_core_inc.h"

@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package mediapipe;
+
+import "mediapipe/framework/calculator.proto";
+import "mediapipe/framework/formats/image_format.proto";
+import "mediapipe/util/color.proto";
+
+message BlankImageCalculatorOptions {
+  extend mediapipe.CalculatorOptions {
+    optional BlankImageCalculatorOptions ext = 340313098;
+  }
+
+  // Width of the generated Image
+  optional int32 width = 1 [default = 500];
+  // Height of the generated Image
+  optional int32 height = 2 [default = 500];
+
+  // Color of the generated Image
+  optional Color color = 3;
+  
+  // Format of the image
+  optional ImageFormat.Format format = 4;
+
+}
