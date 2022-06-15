@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package mediapipe;
+
+import "mediapipe/framework/calculator.proto";
+
+message ConstantMatrixCalculatorOptions {
+  extend mediapipe.CalculatorOptions {
+    optional ConstantMatrixCalculatorOptions ext = 436866027;
+  }
+
+  repeated float values = 1 [packed = true];
+
+}

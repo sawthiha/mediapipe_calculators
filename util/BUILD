@@ -43,3 +43,26 @@ mediapipe_proto_library(
         "//mediapipe/util:color_proto",
     ],
 )
+
+cc_library(name = "constant_matrix_calculator",
+    srcs        = ["constant_matrix_calculator.cc"],
+    visibility  = ["//visibility:public"],
+    deps        = [
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/port:status",
+        ":constant_matrix_calculator_cc_proto",
+    ],
+    alwayslink = 1,
+)
+
+mediapipe_proto_library(
+    name = "constant_matrix_calculator_proto",
+    srcs = ["constant_matrix_calculator.proto"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//mediapipe/framework:calculator_options_proto",
+        "//mediapipe/framework:calculator_proto",
+        "//mediapipe/util:color_proto",
+    ],
+)
+
