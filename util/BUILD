@@ -33,6 +33,23 @@ cc_library(name = "blank_image_calculator",
     alwayslink = 1,
 )
 
+cc_library(name = "proctor_result",
+    srcs        = ["proctor_result.h"],
+    hdrs        = ["proctor_result.h"],
+    visibility  = ["//visibility:public"],
+)
+
+cc_library(name = "proctor_result_calculator",
+    srcs        = ["proctor_result_calculator.cc"],
+    visibility  = ["//visibility:public"],
+    deps        = [
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/port:status",
+        "//mediapipe/framework:timestamp",
+    ],
+    alwayslink = 1,
+)
+
 mediapipe_proto_library(
     name = "blank_image_calculator_proto",
     srcs = ["blank_image_calculator.proto"],

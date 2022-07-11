@@ -71,10 +71,12 @@ namespace mediapipe
             for(auto&& landmarks: multi_face_landmarks)
             {
                 std::map<std::string, double> blink_map;
-
+                
+                // Right Eye
                 cv::Vec3d ur_el { landmarks.landmark(386).x(), landmarks.landmark(386).y() };
                 cv::Vec3d lr_el { landmarks.landmark(374).x(), landmarks.landmark(374).y() };
 
+                // Left Eye
                 cv::Vec3d ul_el { landmarks.landmark(159).x(), landmarks.landmark(159).y() };
                 cv::Vec3d ll_el { landmarks.landmark(145).x(), landmarks.landmark(145).y() };
 
