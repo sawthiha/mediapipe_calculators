@@ -7,7 +7,6 @@
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/framework/port/opencv_core_inc.h"
 #include "mediapipe/framework/formats/landmark.pb.h"
-#include "mediapipe/calculators/core/begin_loop_calculator.h"
 
 namespace mediapipe
 {
@@ -15,16 +14,16 @@ namespace mediapipe
      * @brief Detect facial activity changes
      * 
      * INPUTS:
-     *      0 - Standardized Landmarks (std::vector<NormalizedLandmarkList>)
+     *      0 - Standardized Landmarks (NormalizedLandmarkList)
      * OUTPUTS:
-     *      0 - Facial Activity Deltas (std::vector<double> )
+     *      0 - Facial Activity Delta (double)
      * 
      * Example:
      * 
      * node {
      *   calculator: "FaceActivityCalculator"
-     *   input_stream: "multi_face_std_landmarks"
-     *   output_stream: "multi_face_activities"
+     *   input_stream: "face_std_landmarks"
+     *   output_stream: "face_activities"
      * }
      * 
      */
@@ -49,8 +48,8 @@ namespace mediapipe
 
     absl::Status FaceActivityCalculator::GetContract(CalculatorContract* cc)
     {
-        cc->Inputs().Index(0).Set<std::vector<NormalizedLandmarkList> >();
-        cc->Outputs().Index(0).Set<std::vector<double> >();
+        cc->Inputs().Index(0).Set<NormalizedLandmarkList>();
+        cc->Outputs().Index(0).Set<double>();
         return absl::OkStatus();
     }
 
@@ -59,32 +58,25 @@ namespace mediapipe
 
     absl::Status FaceActivityCalculator::Process(CalculatorContext* cc)
     {
-        std::vector<double > multi_face_activities;
-        if (!cc->Inputs().Index(0).IsEmpty())
-        {
-            const auto& multi_face_landmarks = cc->Inputs().Index(0).Get<std::vector<NormalizedLandmarkList> >();
-            for(auto&& landmarks: multi_face_landmarks)
-            {
-                cv::Mat cur_landmark_mat(landmarks.landmark_size(), 3, CV_64FC1);
+        auto landmarks = cc->Inputs().Index(0).Get<NormalizedLandmarkList>();
+        cv::Mat cur_landmark_mat(landmarks.landmark_size(), 3, CV_64FC1);
 
-                for (int i = 0; i < landmarks.landmark_size(); ++i) {
-                    cur_landmark_mat.at<double>(i, 0) = landmarks.landmark(i).x();
-                    cur_landmark_mat.at<double>(i, 1) = landmarks.landmark(i).y();
-                    cur_landmark_mat.at<double>(i, 2) = landmarks.landmark(i).z();
-                }
-                
-                // Initialize prev_landmark_mat
-                if (m_prev_landmark_mat.size().area() == 0)
-                {
-                    m_prev_landmark_mat = cur_landmark_mat;
-                }
-                
-                multi_face_activities.push_back(cv::norm(cur_landmark_mat - m_prev_landmark_mat, cv::NORM_L2));
-                m_prev_landmark_mat = cur_landmark_mat;
-            }
+        for (int i = 0; i < landmarks.landmark_size(); ++i) {
+            cur_landmark_mat.at<double>(i, 0) = landmarks.landmark(i).x();
+            cur_landmark_mat.at<double>(i, 1) = landmarks.landmark(i).y();
+            cur_landmark_mat.at<double>(i, 2) = landmarks.landmark(i).z();
         }
+        
+        // Initialize prev_landmark_mat
+        if (m_prev_landmark_mat.size().area() == 0)
+        {
+            m_prev_landmark_mat = cur_landmark_mat;
+        }
+        
+        auto delta = cv::norm(cur_landmark_mat - m_prev_landmark_mat, cv::NORM_L2);
+        m_prev_landmark_mat = cur_landmark_mat;
             
-        Packet packet = MakePacket<decltype(multi_face_activities)>(multi_face_activities).At(cc->InputTimestamp());
+        Packet packet = MakePacket<double>(delta).At(cc->InputTimestamp());
         cc->Outputs().Index(0).AddPacket(packet);
 
         return absl::OkStatus();
@@ -92,10 +84,5 @@ namespace mediapipe
 
     absl::Status FaceActivityCalculator::Close(CalculatorContext* cc)
     { return absl::OkStatus(); }
-
-    typedef BeginLoopCalculator<std::vector<double > >
-        BeginLoopFacialActivityVectorCalculator;
-    // Register the begin loop calculator
-    REGISTER_CALCULATOR(BeginLoopFacialActivityVectorCalculator);
 
 } // namespace mediapipe
