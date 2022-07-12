@@ -82,8 +82,8 @@ namespace mediapipe
     absl::Status ProctorResultCalculator::Close(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
-    typedef EndLoopCalculator<std::vector<ProctorResult>> EndLoopProctorResultCalculator;
-    REGISTER_CALCULATOR(EndLoopProctorResultCalculator);
+    typedef EndLoopCalculator<std::vector<ProctorResult>> EndLoopProctorResultVectorCalculator;
+    REGISTER_CALCULATOR(EndLoopProctorResultVectorCalculator);
 
 } // namespace mediapipe
 
