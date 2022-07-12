@@ -14,9 +14,9 @@ namespace mediapipe
      * 
      * INPUTS:
      *      IMAGE - Reference Image, serves as tick signal
-     *      0 - Standardized Landmarks (std::vector<NormalizedLandmarkList>)
+     *      0 - Standardized Landmarks (NormalizedLandmarkList)
      * OUTPUTS:
-     *      0 - Standardized Landmarks (std::vector<NormalizedLandmarkList>)
+     *      0 - Standardized Landmarks (NormalizedLandmarkList)
      * 
      * Example:
      * 
