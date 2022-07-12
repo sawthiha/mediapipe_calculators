@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "mediapipe/framework/calculator_framework.h"
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/calculators/core/end_loop_calculator.h"
