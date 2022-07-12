@@ -36,6 +36,7 @@ cc_library(name = "blank_image_calculator",
 cc_library(name = "proctor_result",
     srcs        = ["proctor_result.h"],
     hdrs        = ["proctor_result.h"],
+    include_prefix = ".",
     visibility  = ["//visibility:public"],
 )
 
@@ -46,6 +47,7 @@ cc_library(name = "proctor_result_calculator",
         "//mediapipe/framework:calculator_framework",
         "//mediapipe/framework/port:status",
         "//mediapipe/framework:timestamp",
+        ":proctor_result",
     ],
     alwayslink = 1,
 )
