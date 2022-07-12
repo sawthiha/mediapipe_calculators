@@ -11,7 +11,6 @@ cc_library(name = "eye_blink_calculator",
         "//mediapipe/framework/formats:landmark_cc_proto",
         "//mediapipe/util:render_data_cc_proto",
         "//mediapipe/framework/port:opencv_imgproc",
-        "//mediapipe/calculators/core:begin_loop_calculator",
     ],
     alwayslink = 1,
 )

@@ -48,6 +48,7 @@ cc_library(name = "proctor_result_calculator",
         "//mediapipe/framework/port:status",
         "//mediapipe/framework:timestamp",
         ":proctor_result",
+        "//mediapipe/calculators/core:end_loop_calculator",
     ],
     alwayslink = 1,
 )

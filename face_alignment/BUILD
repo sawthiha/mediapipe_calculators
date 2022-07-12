@@ -10,7 +10,6 @@ cc_library(name = "face_alignment_calculator",
         "//mediapipe/framework/port:status",
         "//mediapipe/framework/formats:landmark_cc_proto",
         "//mediapipe/util:render_data_cc_proto",
-        "//mediapipe/calculators/core:begin_loop_calculator",
     ],
     alwayslink = 1,
 )
