@@ -54,6 +54,7 @@ cc_library(name = "proctor_result_calculator",
         "//mediapipe/framework:timestamp",
         ":proctor_result",
         "//mediapipe/calculators/core:end_loop_calculator",
+        "//mediapipe/calculators/core:begin_loop_calculator",
     ],
     alwayslink = 1,
 )
@@ -91,3 +92,13 @@ mediapipe_proto_library(
     ],
 )
 
+cc_library(name = "proector_result_to_render_data_calculator",
+    srcs = ["proector_result_to_render_data_calculator.cc"],
+    deps = [
+        "//mediapipe/framework:calculator_framework",
+        "//mediapipe/framework/port:status",
+        "//mediapipe/util:render_data_cc_proto",
+        ":proctor_result",
+    ],
+    visibility = ["//visibility:public"],
+)

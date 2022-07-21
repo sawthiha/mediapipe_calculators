@@ -3,6 +3,7 @@
 #include "mediapipe/framework/calculator_framework.h"
 #include "mediapipe/framework/port/status.h"
 #include "mediapipe/calculators/core/end_loop_calculator.h"
+#include "mediapipe/calculators/core/begin_loop_calculator.h"
 #include "proctor_result.h"
 
 namespace mediapipe
@@ -83,6 +84,9 @@ namespace mediapipe
 
     absl::Status ProctorResultCalculator::Close(CalculatorContext* cc)
     { return absl::OkStatus(); }
+
+    typedef BeginLoopCalculator<std::vector<ProctorResult>> BeginLoopProctorResultVectorCalculator;
+    REGISTER_CALCULATOR(BeginLoopProctorResultVectorCalculator);
 
     typedef EndLoopCalculator<std::vector<ProctorResult>> EndLoopProctorResultVectorCalculator;
     REGISTER_CALCULATOR(EndLoopProctorResultVectorCalculator);
