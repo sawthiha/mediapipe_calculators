@@ -1,3 +1,5 @@
+#pragma once
+
 struct ProctorResult
 {
     bool is_left_eye_blinking;

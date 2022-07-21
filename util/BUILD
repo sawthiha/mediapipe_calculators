@@ -33,8 +33,13 @@ cc_library(name = "blank_image_calculator",
     alwayslink = 1,
 )
 
+exports_files(
+    srcs = [
+        "proctor_result.h",
+    ]
+)
+
 cc_library(name = "proctor_result",
-    srcs        = ["proctor_result.h"],
     hdrs        = ["proctor_result.h"],
     include_prefix = ".",
     visibility  = ["//visibility:public"],
