@@ -4,7 +4,6 @@
 #include "absl/memory/memory.h"
 #include "mediapipe/framework/calculator_framework.h"
 #include "mediapipe/framework/port/status.h"
-#include "mediapipe/framework/formats/landmark.pb.h"
 #include "mediapipe/util/color.pb.h"
 #include "mediapipe/util/render_data.pb.h"
 #include "mediapipe/calculators/custom/util/proctor_result.h"
@@ -129,8 +128,8 @@ namespace mediapipe
         std::string hor_align = result.horizontal_align >= 0.3 ? "Right":
                                 result.horizontal_align <= -0.3 ? "Left":
                                 "Neutral";
-        std::string ver_align = result.horizontal_align >= 0.6 ? "Down":
-                                result.horizontal_align <= -0.05 ? "Up":
+        std::string ver_align = result.vertical_align >= 0.6 ? "Down":
+                                result.vertical_align <= -0.05 ? "Up":
                                 "Neutral";
         this->AnnotateAlignment(render_data, hor_align, 0.05);
         this->AnnotateAlignment(render_data, ver_align, 0.6);

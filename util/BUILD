@@ -92,8 +92,8 @@ mediapipe_proto_library(
     ],
 )
 
-cc_library(name = "proector_result_to_render_data_calculator",
-    srcs = ["proector_result_to_render_data_calculator.cc"],
+cc_library(name = "proctor_result_to_render_data_calculator",
+    srcs = ["proctor_result_to_render_data_calculator.cc"],
     deps = [
         "//mediapipe/framework:calculator_framework",
         "//mediapipe/framework/port:status",
@@ -101,4 +101,5 @@ cc_library(name = "proector_result_to_render_data_calculator",
         ":proctor_result",
     ],
     visibility = ["//visibility:public"],
+    alwayslink = 1,
 )
