@@ -1,0 +1,14 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: An Extension to MediaPipe Calculators
+message: >-
+  "If you use this software, please cite it using
+  these metadata.
+type: software
+authors:
+  - given-names: Saw Thiha
+    email: saw1996.dev@gmail.com
+    orcid: 'https://orcid.org/0000-0002-4050-0267'
+    affiliation: Tokyo International University
