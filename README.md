@@ -11,6 +11,9 @@ Custom calculators for Mediapipe framework.
     - Blink Detector
     - Blink-to-RenderData
 
+## Requirement
+- Mediapipe v0.8.10.2 (Simply checkout on [this commit](https://github.com/google/mediapipe/commit/63e679d9))
+
 ## Installation
 You simply put this source directory as submodule into `mediapipe/calculators/custom` or anywhere else inside `mediapipe` where you can reference from bazel. Or, simply run the following commands from the `mediapipe` root directory.
 
