@@ -6,11 +6,12 @@ title: An Extension to MediaPipe Calculators
 message: >-
   "If you use this software, please cite it using
   these metadata.
-type: software
+type: misc
 authors:
   - given-names: Thiha
     email: saw1996.dev@gmail.com
     orcid: 'https://orcid.org/0000-0002-4050-0267'
     affiliation: Tokyo International University
     family-names: Saw
+license: Apache-2.0
 repository-code: 'https://github.com/sawthiha/mediapipe_calculators.git'
