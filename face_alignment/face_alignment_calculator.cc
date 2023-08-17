@@ -9,12 +9,12 @@
 namespace mediapipe
 {
     /**
-     * @brief Detect face alignments from Standardized Landmarks
+     * @brief Detect face orientations from Standardized Landmarks
      * 
      * INPUTS:
      *      0 - Standardized Landmarks (NormalizedLandmarkList)
      * OUTPUTS:
-     *      0 - Face Alignment data (std::map<std::string, double>)
+     *      0 - Face orientation data (std::map<std::string, double>)
      *      {
      *          "horizontal_align": 0.0 being neutral, + being right, - being left
      *          "vertical_align":   0.0 being neutral, + being down,  - being up
@@ -23,17 +23,17 @@ namespace mediapipe
      * Example:
      * 
      * node {
-     *   calculator: "FaceAlignmentCalculator"
+     *   calculator: "FaceOrientationCalculator"
      *   input_stream: "face_std_landmarks"
-     *   output_stream: "face_alignments"
+     *   output_stream: "face_orientations"
      * }
      * 
      */
-    class FaceAlignmentCalculator: public CalculatorBase
+    class FaceOrientationCalculator: public CalculatorBase
     {
     public:
-        FaceAlignmentCalculator() = default;
-        ~FaceAlignmentCalculator() override = default;
+        FaceOrientationCalculator() = default;
+        ~FaceOrientationCalculator() override = default;
 
         static absl::Status GetContract(CalculatorContract* cc);
 
@@ -44,32 +44,32 @@ namespace mediapipe
     };
 
     // Register the calculator to be used in the graph
-    REGISTER_CALCULATOR(FaceAlignmentCalculator);
+    REGISTER_CALCULATOR(FaceOrientationCalculator);
 
-    absl::Status FaceAlignmentCalculator::GetContract(CalculatorContract* cc)
+    absl::Status FaceOrientationCalculator::GetContract(CalculatorContract* cc)
     {
         cc->Inputs().Index(0).Set<NormalizedLandmarkList>();
         cc->Outputs().Index(0).Set<std::map<std::string, double>>();
         return absl::OkStatus();
     }
 
-    absl::Status FaceAlignmentCalculator::Open(CalculatorContext* cc)
+    absl::Status FaceOrientationCalculator::Open(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
-    absl::Status FaceAlignmentCalculator::Process(CalculatorContext* cc)
+    absl::Status FaceOrientationCalculator::Process(CalculatorContext* cc)
     {
         auto landmarks = cc->Inputs().Index(0).Get<NormalizedLandmarkList>();
-        std::map<std::string, double> alignment_map;
-        alignment_map["horizontal_align"]   = landmarks.landmark(1).x();
-        alignment_map["vertical_align"]     = landmarks.landmark(1).y();
+        std::map<std::string, double> orientation_map;
+        orientation_map["horizontal_align"]   = landmarks.landmark(1).x();
+        orientation_map["vertical_align"]     = landmarks.landmark(1).y();
             
-        Packet packet = MakePacket<decltype(alignment_map)>(alignment_map).At(cc->InputTimestamp());
+        Packet packet = MakePacket<decltype(orientation_map)>(orientation_map).At(cc->InputTimestamp());
         cc->Outputs().Index(0).AddPacket(packet);
 
         return absl::OkStatus();
     } // Process()
 
-    absl::Status FaceAlignmentCalculator::Close(CalculatorContext* cc)
+    absl::Status FaceOrientationCalculator::Close(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
 } // namespace mediapipe

@@ -4,9 +4,9 @@ Custom calculators for Mediapipe framework.
 ## Features
 - Utility
     - Landmark Standardization Calculator
-- Face Alignment
-    - Alignment Detector
-    - Alignment-to-RenderData
+- Face orientation
+    - orientation Detector
+    - orientation-to-RenderData
 - Eye Blink
     - Blink Detector
     - Blink-to-RenderData

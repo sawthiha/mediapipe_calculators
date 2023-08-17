@@ -19,7 +19,7 @@ namespace mediapipe
      * # Proctor Result Calculator
      *  node  {
      *      calculator: "ProctorResultCalculator"
-     *      input_stream: "ALIGN:face_alignments"
+     *      input_stream: "ALIGN:face_orientations"
      *      input_stream: "BLINK:face_blinks"
      *      input_stream: "ACTIVE:face_activity"
      *      input_stream: "MOVE:face_movement"
@@ -69,9 +69,9 @@ namespace mediapipe
         result.is_left_eye_blinking = blink.at("left") < threshold;
         result.is_right_eye_blinking = blink.at("right") < threshold;
         
-        auto alignment = cc->Inputs().Tag("ALIGN").Get<std::map<std::string, double>>();
-        result.horizontal_align = alignment.at("horizontal_align");
-        result.vertical_align   = alignment.at("vertical_align");
+        auto orientation = cc->Inputs().Tag("ALIGN").Get<std::map<std::string, double>>();
+        result.horizontal_align = orientation.at("horizontal_align");
+        result.vertical_align   = orientation.at("vertical_align");
             
         result.facial_activity = cc->Inputs().Tag("ACTIVE").Get<double>();
         result.face_movement = cc->Inputs().Tag("MOVE").Get<double>();

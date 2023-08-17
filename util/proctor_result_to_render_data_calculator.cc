@@ -38,7 +38,7 @@ namespace mediapipe
     {
     private:
         void AnnotateBlink(RenderData& render_data, bool is_blinking, double left_pos);
-        void AnnotateAlignment(RenderData& render_data, std::string alignment, double left_pos);
+        void AnnotateOrientation(RenderData& render_data, std::string orientation, double left_pos);
 
     public:
         ProctorResultToRenderDataCalculator() = default;
@@ -90,10 +90,10 @@ namespace mediapipe
         text->set_baseline(0.25);
     } // AnnotateBlink
 
-    void ProctorResultToRenderDataCalculator::AnnotateAlignment(RenderData& render_data, std::string alignment, double left_pos)
+    void ProctorResultToRenderDataCalculator::AnnotateOrientation(RenderData& render_data, std::string orientation, double left_pos)
     {
         auto annotation = render_data.add_render_annotations();
-        if(alignment == "Neutral")
+        if(orientation == "Neutral")
         {
             annotation->mutable_color()->set_r(0);
             annotation->mutable_color()->set_g(255);
@@ -108,7 +108,7 @@ namespace mediapipe
         auto text = annotation->mutable_text();
         text->set_font_height(0.04);
         text->set_font_face(0);
-        text->set_display_text(alignment);
+        text->set_display_text(orientation);
         text->set_normalized(true);
         text->set_left(left_pos);
         // Normalized coordinates must be between 0.0 and 1.0, if they are used.
@@ -131,8 +131,8 @@ namespace mediapipe
         std::string ver_align = result.vertical_align >= 0.6 ? "Down":
                                 result.vertical_align <= -0.05 ? "Up":
                                 "Neutral";
-        this->AnnotateAlignment(render_data, hor_align, 0.05);
-        this->AnnotateAlignment(render_data, ver_align, 0.6);
+        this->AnnotateOrientation(render_data, hor_align, 0.05);
+        this->AnnotateOrientation(render_data, ver_align, 0.6);
         
         Packet packet = MakePacket<decltype(render_data)>(render_data).At(cc->InputTimestamp());
         cc->Outputs().Tag(kRenderDataStreamTag).AddPacket(packet);

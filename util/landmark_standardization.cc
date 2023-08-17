@@ -10,7 +10,7 @@
 namespace mediapipe
 {
     /**
-     * @brief Detect face alignments from Standardized Landmarks
+     * @brief Detect face orientations from Standardized Landmarks
      * 
      * INPUTS:
      *      IMAGE - Reference Image, serves as tick signal

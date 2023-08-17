@@ -13,34 +13,34 @@ namespace mediapipe
 
     namespace
     {
-        constexpr char kAlignmentStreamTag[]  = "ALIGNMENT";
+        constexpr char korientationStreamTag[]  = "orientation";
         constexpr char kRenderDataStreamTag[] = "RENDER";
     } // namespace
 
     /**
-     * @brief Annotate Detected Face Alignment
+     * @brief Annotate Detected Face orientation
      * 
      * INPUTS:
-     *      ALIGNMENT - Alignments (std::vector<std::map<std::string, double> >)
+     *      orientation - orientations (std::vector<std::map<std::string, double> >)
      * OUTPUTS:
      *      RENDER - Render Data to be render by OverlayRenderer (RenderData)
      * 
      * Example:
      * 
      * node {
-     *   calculator: "FaceAlignmentToRenderDataCalculator"
-     *   input_stream: "ALIGNMENT:multi_face_alignments"
-     *   output_stream: "RENDER:alignment_render_data"
+     *   calculator: "FaceOrientationToRenderDataCalculator"
+     *   input_stream: "orientation:multi_face_orientations"
+     *   output_stream: "RENDER:orientation_render_data"
      * }
      * 
      */
-    class FaceAlignmentToRenderDataCalculator: public CalculatorBase
+    class FaceOrientationToRenderDataCalculator: public CalculatorBase
     {
     private:
-        void AnnotateAlignment(RenderData& render_data, std::string alignment, double left_pos);
+        void Annotateorientation(RenderData& render_data, std::string orientation, double left_pos);
     public:
-        FaceAlignmentToRenderDataCalculator() = default;
-        ~FaceAlignmentToRenderDataCalculator() override = default;
+        FaceOrientationToRenderDataCalculator() = default;
+        ~FaceOrientationToRenderDataCalculator() override = default;
 
         static absl::Status GetContract(CalculatorContract* cc);
 
@@ -50,22 +50,22 @@ namespace mediapipe
 
     };
     // Register the calculator to be used in the graph
-    REGISTER_CALCULATOR(FaceAlignmentToRenderDataCalculator);
+    REGISTER_CALCULATOR(FaceOrientationToRenderDataCalculator);
 
-    absl::Status FaceAlignmentToRenderDataCalculator::GetContract(CalculatorContract* cc)
+    absl::Status FaceOrientationToRenderDataCalculator::GetContract(CalculatorContract* cc)
     {
-        cc->Inputs().Tag(kAlignmentStreamTag).Set<std::vector<std::map<std::string, double> > >();
+        cc->Inputs().Tag(korientationStreamTag).Set<std::vector<std::map<std::string, double> > >();
         cc->Outputs().Tag(kRenderDataStreamTag).Set<RenderData>();
         return absl::OkStatus();
     }
 
-    absl::Status FaceAlignmentToRenderDataCalculator::Open(CalculatorContext* cc)
+    absl::Status FaceOrientationToRenderDataCalculator::Open(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
-    void FaceAlignmentToRenderDataCalculator::AnnotateAlignment(RenderData& render_data, std::string alignment, double left_pos)
+    void FaceOrientationToRenderDataCalculator::Annotateorientation(RenderData& render_data, std::string orientation, double left_pos)
     {
         auto annotation = render_data.add_render_annotations();
-        if(alignment == "Neutral")
+        if(orientation == "Neutral")
         {
             annotation->mutable_color()->set_r(0);
             annotation->mutable_color()->set_g(255);
@@ -80,31 +80,31 @@ namespace mediapipe
         auto text = annotation->mutable_text();
         text->set_font_height(0.04);
         text->set_font_face(0);
-        text->set_display_text(alignment);
+        text->set_display_text(orientation);
         text->set_normalized(true);
         text->set_left(left_pos);
         // Normalized coordinates must be between 0.0 and 1.0, if they are used.
         text->set_baseline(0.2);
-    } // AnnotateAlignment()
+    } // Annotateorientation()
 
-    absl::Status FaceAlignmentToRenderDataCalculator::Process(CalculatorContext* cc)
+    absl::Status FaceOrientationToRenderDataCalculator::Process(CalculatorContext* cc)
     {
         RenderData render_data;
-        if (!cc->Inputs().Tag(kAlignmentStreamTag).IsEmpty())
+        if (!cc->Inputs().Tag(korientationStreamTag).IsEmpty())
         {
-            auto multi_face_alignments = cc->Inputs().Tag(kAlignmentStreamTag).Get<std::vector<std::map<std::string, double> > >();
-            if(!multi_face_alignments.empty())
+            auto multi_face_orientations = cc->Inputs().Tag(korientationStreamTag).Get<std::vector<std::map<std::string, double> > >();
+            if(!multi_face_orientations.empty())
             {
-                auto alignment = multi_face_alignments.at(0);
-                std::string hor_align =    alignment.at("horizontal_align") >= 0.3 ? "Right":
-                                            alignment.at("horizontal_align") <= -0.3 ? "Left":
+                auto orientation = multi_face_orientations.at(0);
+                std::string hor_align =    orientation.at("horizontal_align") >= 0.3 ? "Right":
+                                            orientation.at("horizontal_align") <= -0.3 ? "Left":
                                             "Neutral";
-                std::string ver_align =    alignment.at("vertical_align") >= 0.6 ? "Down":
-                                            alignment.at("vertical_align") <= -0.05 ? "Up":
+                std::string ver_align =    orientation.at("vertical_align") >= 0.6 ? "Down":
+                                            orientation.at("vertical_align") <= -0.05 ? "Up":
                                             "Neutral";
                 
-                this->AnnotateAlignment(render_data, hor_align, 0.05);
-                this->AnnotateAlignment(render_data, ver_align, 0.6);
+                this->Annotateorientation(render_data, hor_align, 0.05);
+                this->Annotateorientation(render_data, ver_align, 0.6);
             }
         }
         
@@ -114,7 +114,7 @@ namespace mediapipe
         return absl::OkStatus();
     } // Process()
 
-    absl::Status FaceAlignmentToRenderDataCalculator::Close(CalculatorContext* cc)
+    absl::Status FaceOrientationToRenderDataCalculator::Close(CalculatorContext* cc)
     { return absl::OkStatus(); }
 
 } // namespace mediapipe
