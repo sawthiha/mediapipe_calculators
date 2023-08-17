@@ -1,6 +1,9 @@
 # Custom Mediapipe Calculators
 Custom calculators for Mediapipe framework.
 
+## Archived (No longer to be continued)
+Please check [mp_proctor](https://github.com/sawthiha/mp_proctor.git) as it organizes all the calculators, graphs and the demo application.
+
 ## Features
 - Utility
     - Landmark Standardization Calculator
